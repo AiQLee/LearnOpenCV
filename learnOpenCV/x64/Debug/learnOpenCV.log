@@ -1,0 +1,9 @@
+﻿  colorDetection.cpp
+c:\opencv-3.1.0\opencv\build\include\opencv2\core\mat.hpp(1965): warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
+c:\opencv-3.1.0\opencv\build\include\opencv2\core\persistence.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
+c:\opencv-3.1.0\opencv\build\include\opencv2\core\utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
+c:\opencv-3.1.0\opencv\build\include\opencv2\core\utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
+c:\users\li zhengqing\documents\visual studio 2015\projects\learnopencv\learnopencv\colordetection.cpp(94): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\li zhengqing\documents\visual studio 2015\projects\learnopencv\learnopencv\colordetection.cpp(95): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+  learnOpenCV.vcxproj -> C:\Users\Li Zhengqing\documents\visual studio 2015\Projects\learnOpenCV\x64\Debug\learnOpenCV.exe
+  learnOpenCV.vcxproj -> C:\Users\Li Zhengqing\documents\visual studio 2015\Projects\learnOpenCV\x64\Debug\learnOpenCV.pdb (Partial PDB)
