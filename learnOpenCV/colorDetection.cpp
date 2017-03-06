@@ -5,12 +5,23 @@
 using namespace cv;
 using namespace std;
 
+Mat rotate(Mat src, double angle) {
+	Mat dst;
+	Point2f pt(src.cols / 2., src.rows / 2.);
+	Mat r = getRotationMatrix2D(pt, angle, 1.0);
+	warpAffine(src, dst, r, Size(src.cols, src.rows));
+	return dst;
+}
+
 int main(int argc, char** argv)
 {
-	VideoCapture cap(0); //capture the video from webcam
+	//VideoCapture cap(0); //capture the video from webcam
+	VideoCapture cap("http://172.16.0.254:9176");
 
-	cap.set(CV_CAP_PROP_FRAME_WIDTH, 1440);
-	cap.set(CV_CAP_PROP_FRAME_HEIGHT, 1440);
+	//cap.set(CV_CAP_PROP_FRAME_WIDTH, 1440);
+	//cap.set(CV_CAP_PROP_FRAME_HEIGHT, 1440);
+	cap.set(CV_CAP_PROP_FRAME_WIDTH, 1280);
+	cap.set(CV_CAP_PROP_FRAME_HEIGHT, 1280);
 
 	if (!cap.isOpened())  // if not success, exit program
 	{
@@ -20,14 +31,14 @@ int main(int argc, char** argv)
 
 	namedWindow("Control", CV_WINDOW_AUTOSIZE); //create a window called "Control"
 
-	int iLowH = 170;
-	int iHighH = 179;
+	int iLowH = 38;
+	int iHighH = 75;
 
-	int iLowS = 150;
-	int iHighS = 255;
+	int iLowS = 51;
+	int iHighS = 155;
 
-	int iLowV = 60;
-	int iHighV = 255;
+	int iLowV = 51;
+	int iHighV = 155;
 
 	//Create trackbars in "Control" window
 	createTrackbar("LowH", "Control", &iLowH, 179); //Hue (38 - 75)
@@ -49,6 +60,7 @@ int main(int argc, char** argv)
 	//Create a black image with the size as the camera output
 	Mat imgLines = Mat::zeros(imgTmp.size(), CV_8UC3);;
 
+	double angle = 0.0;
 
 	while (true)
 	{
@@ -88,7 +100,7 @@ int main(int argc, char** argv)
 		double dArea = oMoments.m00;
 
 		// if the area <= 10000, I consider that the there are no object in the image and it's because of the noise, the area is not zero 
-		if (dArea > 10000)
+		if (dArea > 100000)
 		{
 			//calculate the position of the ball
 			int posX = dM10 / dArea;
@@ -97,8 +109,34 @@ int main(int argc, char** argv)
 			if (iLastX >= 0 && iLastY >= 0 && posX >= 0 && posY >= 0)
 			{
 				//Draw a red line from the previous point to the current point
-				line(imgLines, Point(posX, posY), Point(iLastX, iLastY), Scalar(0, 0, 255), 2);
+				cout << "posX " << posX << ";  " << "posY " << posY << endl;
+				cout << "iLastX " << iLastX << ";  " << "iLastY " << iLastY << endl;
+				//line(imgLines, Point(posX, posY), Point(iLastX, iLastY), Scalar(0, 0, 255), 2);
 			}
+			double posChanged;
+			if ( posY < imgOriginal.rows / 2) {
+				if (posX - iLastX > 0) {
+					 posChanged = sqrt( pow((posX - iLastX),2) + pow((posY - iLastY),2));
+				}
+				else {
+					 posChanged = -sqrt(pow((posX - iLastX),2) + pow((posY - iLastY),2));
+				}
+			}
+			else {
+				if (posX - iLastX > 0) {
+					 posChanged = -sqrt(pow((posX - iLastX),2) + pow((posY - iLastY),2));
+				}
+				else {
+					 posChanged = sqrt(pow((posX - iLastX),2) + pow((posY - iLastY),2));
+				}
+			}
+
+			if (iLastX != -1 && iLastY != -1) {
+				if(abs(posChanged) > 10)
+					angle = angle + posChanged;
+			}
+
+			cout << "angle " << angle  << endl;
 
 			iLastX = posX;
 			iLastY = posY;
@@ -106,8 +144,19 @@ int main(int argc, char** argv)
 
 		imshow("Thresholded Image", imgThresholded); //show the thresholded image
 
-		imgOriginal = imgOriginal + imgLines;
-		imshow("Original", imgOriginal); //show the original image
+		imgOriginal = rotate(imgOriginal, angle/5);
+
+		//imgOriginal = imgOriginal + imgLines;
+
+		cv::Mat	rawImage = cv::Mat(600, 800, CV_8UC3);
+		cv::resize(imgOriginal, rawImage, rawImage.size());
+
+		cv::Mat	resultImage = cv::Mat(600, 800, CV_8UC3);
+		for (int i = 0; i < 800; i++) {
+		rawImage.col(i).copyTo(resultImage.col(799-i));
+		}
+
+		imshow("Original", resultImage); //show the original image
 
 		if (waitKey(30) == 27) //wait for 'esc' key press for 30ms. If 'esc' key is pressed, break loop
 		{
