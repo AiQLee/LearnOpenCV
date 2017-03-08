@@ -31,23 +31,22 @@ int main(int argc, char** argv)
 
 	namedWindow("Control", CV_WINDOW_AUTOSIZE); //create a window called "Control"
 
-	int iLowH = 38;
-	int iHighH = 75;
-
-	int iLowS = 51;
-	int iHighS = 155;
-
-	int iLowV = 51;
-	int iHighV = 155;
+	//This is the value to track the green glove
+	int iLowH = 21;
+	int iHighH = 40;
+	int iLowS = 56;
+	int iHighS = 141;
+	int iLowV = 70;
+	int iHighV = 255;
 
 	//Create trackbars in "Control" window
-	createTrackbar("LowH", "Control", &iLowH, 179); //Hue (38 - 75)
+	createTrackbar("LowH", "Control", &iLowH, 179); 
 	createTrackbar("HighH", "Control", &iHighH, 179);
 
-	createTrackbar("LowS", "Control", &iLowS, 255); //Saturation (51 - 155)
+	createTrackbar("LowS", "Control", &iLowS, 255);
 	createTrackbar("HighS", "Control", &iHighS, 255);
 
-	createTrackbar("LowV", "Control", &iLowV, 255);//Value (51 - 155)
+	createTrackbar("LowV", "Control", &iLowV, 255);
 	createTrackbar("HighV", "Control", &iHighV, 255);
 
 	int iLastX = -1;
@@ -92,12 +91,57 @@ int main(int argc, char** argv)
 		dilate(imgThresholded, imgThresholded, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)));
 		erode(imgThresholded, imgThresholded, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)));
 
+		///////////////////////////////////////////////////
+		//Try to use contours detection.
+		vector<vector<Point>> contours;
+		vector<Vec4i> hierarchy;
+		int thresh = 100;
+		int max_thresh = 255;
+		Mat canny_output;
+		RNG rng(12345);
+
+		// Detect edges using canny
+		Canny(imgThresholded, canny_output, thresh, thresh * 2, 3);
+
+		// Find contours
+		findContours(canny_output, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0));
+
+		vector<Moments> mu(contours.size());
+		for (int i = 0; i < contours.size(); i++){
+			mu[i] = moments(contours[i], false);
+		}
+
+		for (int i = 0; i < contours.size(); i++) {
+			double contourArea = cv::contourArea(contours[i]);
+			cout << "contourArea " << i << " : " << contourArea << ";  " << endl;
+		
+		}
+
+		for (int i = 0; i < mu.size(); i++) {
+			if (mu[i].m00 > 50000) {
+				cout << "mu " << i << " 's area :   "  << mu[i].m00 << ";  " << endl;
+			}
+		}
+
+		Mat drawing = Mat::zeros(canny_output.size(), CV_8UC3);
+		cout << "contours.size() "  <<  contours.size() << ";  " << endl;
+
+		for (int i = 0; i < contours.size(); i++) {
+			Scalar color = Scalar(rng.uniform(0, 255), rng.uniform(0, 255), rng.uniform(0, 255));
+			drawContours(drawing, contours, i, color, 2, 8, hierarchy, 0, Point());
+		}
+
+		imshow("Contours", drawing);
+		///////////////////////////////////////////////////
+
+
 		//Calculate the moments of the thresholded image
 		Moments oMoments = moments(imgThresholded);
 
 		double dM01 = oMoments.m01;
 		double dM10 = oMoments.m10;
 		double dArea = oMoments.m00;
+		cout << "dArea " << dArea << ";  " << endl;
 
 		// if the area <= 10000, I consider that the there are no object in the image and it's because of the noise, the area is not zero 
 		if (dArea > 100000)
@@ -109,8 +153,8 @@ int main(int argc, char** argv)
 			if (iLastX >= 0 && iLastY >= 0 && posX >= 0 && posY >= 0)
 			{
 				//Draw a red line from the previous point to the current point
-				cout << "posX " << posX << ";  " << "posY " << posY << endl;
-				cout << "iLastX " << iLastX << ";  " << "iLastY " << iLastY << endl;
+				//cout << "posX " << posX << ";  " << "posY " << posY << endl;
+				//cout << "iLastX " << iLastX << ";  " << "iLastY " << iLastY << endl;
 				//line(imgLines, Point(posX, posY), Point(iLastX, iLastY), Scalar(0, 0, 255), 2);
 			}
 			double posChanged;
@@ -136,7 +180,7 @@ int main(int argc, char** argv)
 					angle = angle + posChanged;
 			}
 
-			cout << "angle " << angle  << endl;
+			//cout << "angle " << angle  << endl;
 
 			iLastX = posX;
 			iLastY = posY;
@@ -144,19 +188,19 @@ int main(int argc, char** argv)
 
 		imshow("Thresholded Image", imgThresholded); //show the thresholded image
 
-		imgOriginal = rotate(imgOriginal, angle/5);
+		//imgOriginal = rotate(imgOriginal, angle/5);
 
-		//imgOriginal = imgOriginal + imgLines;
+		////imgOriginal = imgOriginal + imgLines;
 
-		cv::Mat	rawImage = cv::Mat(600, 800, CV_8UC3);
-		cv::resize(imgOriginal, rawImage, rawImage.size());
+		//cv::Mat	rawImage = cv::Mat(600, 800, CV_8UC3);
+		//cv::resize(imgOriginal, rawImage, rawImage.size());
 
-		cv::Mat	resultImage = cv::Mat(600, 800, CV_8UC3);
-		for (int i = 0; i < 800; i++) {
-		rawImage.col(i).copyTo(resultImage.col(799-i));
-		}
+		//cv::Mat	resultImage = cv::Mat(600, 800, CV_8UC3);
+		//for (int i = 0; i < 800; i++) {
+		//rawImage.col(i).copyTo(resultImage.col(799-i));
+		//}
 
-		imshow("Original", resultImage); //show the original image
+		imshow("Original", imgOriginal); //show the original image
 
 		if (waitKey(30) == 27) //wait for 'esc' key press for 30ms. If 'esc' key is pressed, break loop
 		{
