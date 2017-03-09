@@ -32,7 +32,7 @@ int main(int argc, char** argv)
 	namedWindow("Control", CV_WINDOW_AUTOSIZE); //create a window called "Control"
 
 	//This is the value to track the green glove
-	int iLowH = 21;
+	int iLowH = 25; //22
 	int iHighH = 40;
 	int iLowS = 56;
 	int iHighS = 141;
@@ -51,6 +51,7 @@ int main(int argc, char** argv)
 
 	int iLastX = -1;
 	int iLastY = -1;
+	int lastFingerSize = -1;
 
 	//Capture a temporary image from the camera
 	Mat imgTmp;
@@ -60,6 +61,7 @@ int main(int argc, char** argv)
 	Mat imgLines = Mat::zeros(imgTmp.size(), CV_8UC3);;
 
 	double angle = 0.0;
+	bool startTracking = false;
 
 	while (true)
 	{
@@ -94,37 +96,35 @@ int main(int argc, char** argv)
 		///////////////////////////////////////////////////
 		//Try to use contours detection.
 		vector<vector<Point>> contours;
+		vector<Moments> fingersMoments;
 		vector<Vec4i> hierarchy;
 		int thresh = 100;
 		int max_thresh = 255;
 		Mat canny_output;
 		RNG rng(12345);
-
+		
 		// Detect edges using canny
 		Canny(imgThresholded, canny_output, thresh, thresh * 2, 3);
 
 		// Find contours
-		findContours(canny_output, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0));
+		findContours(canny_output, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE, Point(0, 0));
 
-		vector<Moments> mu(contours.size());
-		for (int i = 0; i < contours.size(); i++){
-			mu[i] = moments(contours[i], false);
-		}
+		//vector<Moments> mu(contours.size());
+		//for (int i = 0; i < contours.size(); i++){
+		//	mu[i] = moments(contours[i], false);
+		//}
 
 		for (int i = 0; i < contours.size(); i++) {
 			double contourArea = cv::contourArea(contours[i]);
-			cout << "contourArea " << i << " : " << contourArea << ";  " << endl;
-		
-		}
-
-		for (int i = 0; i < mu.size(); i++) {
-			if (mu[i].m00 > 50000) {
-				cout << "mu " << i << " 's area :   "  << mu[i].m00 << ";  " << endl;
+			//cout << "contourArea " << i << " : " << contourArea << ";  " << endl;
+			if (contourArea > 500.0) {
+				Moments tmpM = moments(contours[i], false);
+				fingersMoments.push_back(tmpM);
 			}
 		}
 
 		Mat drawing = Mat::zeros(canny_output.size(), CV_8UC3);
-		cout << "contours.size() "  <<  contours.size() << ";  " << endl;
+		//cout << "contours.size() "  <<  contours.size() << ";  " << endl;
 
 		for (int i = 0; i < contours.size(); i++) {
 			Scalar color = Scalar(rng.uniform(0, 255), rng.uniform(0, 255), rng.uniform(0, 255));
@@ -134,17 +134,45 @@ int main(int argc, char** argv)
 		imshow("Contours", drawing);
 		///////////////////////////////////////////////////
 
+		double dM01, dM10, dArea = 0;
+
+		if (!fingersMoments.empty()) {
+			cout << "Fingers are tracked!" << endl;
+			
+			if(fingersMoments.size() > 1)
+				startTracking = true;
+
+			cout << "fingersMoments.size() " << fingersMoments.size() << endl;
+
+			if (startTracking) {
+				if (fingersMoments.size() == 1) {
+					if (lastFingerSize == 2) {
+						iLastX = -1;
+						iLastY = -1;
+					}
+						
+
+					dM01 = fingersMoments[0].m01;
+					dM10 = fingersMoments[0].m10;
+					dArea = fingersMoments[0].m00;
+					cout << " fingersMoments 0 "  << "  :  " << dArea << ";  " << endl;
+				
+				}
+			}
+		}
+
+
 
 		//Calculate the moments of the thresholded image
-		Moments oMoments = moments(imgThresholded);
+		//Moments oMoments = moments(imgThresholded);
 
-		double dM01 = oMoments.m01;
-		double dM10 = oMoments.m10;
-		double dArea = oMoments.m00;
+		//double dM01 = oMoments.m01;
+		//double dM10 = oMoments.m10;
+		//double dArea = oMoments.m00;
 		cout << "dArea " << dArea << ";  " << endl;
 
 		// if the area <= 10000, I consider that the there are no object in the image and it's because of the noise, the area is not zero 
-		if (dArea > 100000)
+		if (dArea > 1500)
 		{
 			//calculate the position of the ball
 			int posX = dM10 / dArea;
@@ -180,7 +208,7 @@ int main(int argc, char** argv)
 					angle = angle + posChanged;
 			}
 
-			//cout << "angle " << angle  << endl;
+			cout << "angle " << angle  << endl;
 
 			iLastX = posX;
 			iLastY = posY;
@@ -188,25 +216,29 @@ int main(int argc, char** argv)
 
 		imshow("Thresholded Image", imgThresholded); //show the thresholded image
 
-		//imgOriginal = rotate(imgOriginal, angle/5);
+		imgOriginal = rotate(imgOriginal, -angle/5);
 
-		////imgOriginal = imgOriginal + imgLines;
+		//imgOriginal = imgOriginal + imgLines;
 
-		//cv::Mat	rawImage = cv::Mat(600, 800, CV_8UC3);
-		//cv::resize(imgOriginal, rawImage, rawImage.size());
+		cv::Mat	rawImage = cv::Mat(600, 800, CV_8UC3);
+		cv::resize(imgOriginal, rawImage, rawImage.size());
 
-		//cv::Mat	resultImage = cv::Mat(600, 800, CV_8UC3);
-		//for (int i = 0; i < 800; i++) {
-		//rawImage.col(i).copyTo(resultImage.col(799-i));
-		//}
+		cv::Mat	resultImage = cv::Mat(600, 800, CV_8UC3);
+		for (int i = 0; i < 800; i++) {
+		rawImage.col(i).copyTo(resultImage.col(799-i));
+		}
 
-		imshow("Original", imgOriginal); //show the original image
+		imshow("Original", resultImage); //show the original image
+
+		lastFingerSize = fingersMoments.size();
 
 		if (waitKey(30) == 27) //wait for 'esc' key press for 30ms. If 'esc' key is pressed, break loop
 		{
 			cout << "esc key is pressed by user" << endl;
 			break;
 		}
+	
+
 	}
 
 	return 0;
