@@ -15,13 +15,15 @@ Mat rotate(Mat src, double angle) {
 
 int main(int argc, char** argv)
 {
-	//VideoCapture cap(0); //capture the video from webcam
-	VideoCapture cap("http://172.16.0.254:9176");
+	VideoCapture cap(0); //capture the video from webcam
 
-	//cap.set(CV_CAP_PROP_FRAME_WIDTH, 1440);
-	//cap.set(CV_CAP_PROP_FRAME_HEIGHT, 1440);
-	cap.set(CV_CAP_PROP_FRAME_WIDTH, 1280);
-	cap.set(CV_CAP_PROP_FRAME_HEIGHT, 1280);
+	cap.set(CV_CAP_PROP_FRAME_WIDTH, 1440);
+	cap.set(CV_CAP_PROP_FRAME_HEIGHT, 1440);
+
+	//VideoCapture cap("http://172.16.0.254:9176");
+
+	//cap.set(CV_CAP_PROP_FRAME_WIDTH, 1280);
+	//cap.set(CV_CAP_PROP_FRAME_HEIGHT, 1280);
 
 	if (!cap.isOpened())  // if not success, exit program
 	{
@@ -31,13 +33,28 @@ int main(int argc, char** argv)
 
 	namedWindow("Control", CV_WINDOW_AUTOSIZE); //create a window called "Control"
 
-	//This is the value to track the green glove
-	int iLowH = 25; //22
-	int iHighH = 40;
-	int iLowS = 56;
-	int iHighS = 141;
-	int iLowV = 70;
-	int iHighV = 255;
+	//int iLowH = 0; //22
+	//int iHighH = 10;
+	//int iLowS = 48;
+	//int iHighS = 140;
+	//int iLowV = 80;
+	//int iHighV = 255;
+
+	int iLowH = 0; //22
+	int iHighH = 10;
+	int iLowS = 40;
+	int iHighS = 140;
+	int iLowV = 60;
+	int iHighV = 210;
+
+
+	////This is the value to track the green glove
+	//int iLowH = 25; //22
+	//int iHighH = 40;
+	//int iLowS = 56;
+	//int iHighS = 141;
+	//int iLowV = 70;
+	//int iHighV = 255;
 
 	//Create trackbars in "Control" window
 	createTrackbar("LowH", "Control", &iLowH, 179); 
@@ -54,11 +71,11 @@ int main(int argc, char** argv)
 	int lastFingerSize = -1;
 
 	//Capture a temporary image from the camera
-	Mat imgTmp;
-	cap.read(imgTmp);
+	//Mat imgTmp;
+	//cap.read(imgTmp);
 
-	//Create a black image with the size as the camera output
-	Mat imgLines = Mat::zeros(imgTmp.size(), CV_8UC3);;
+	////Create a black image with the size as the camera output
+	//Mat imgLines = Mat::zeros(imgTmp.size(), CV_8UC3);;
 
 	double angle = 0.0;
 	bool startTracking = false;
@@ -117,7 +134,7 @@ int main(int argc, char** argv)
 		for (int i = 0; i < contours.size(); i++) {
 			double contourArea = cv::contourArea(contours[i]);
 			//cout << "contourArea " << i << " : " << contourArea << ";  " << endl;
-			if (contourArea > 500.0) {
+			if (contourArea > 30000.0) {
 				Moments tmpM = moments(contours[i], false);
 				fingersMoments.push_back(tmpM);
 			}
@@ -139,14 +156,14 @@ int main(int argc, char** argv)
 		if (!fingersMoments.empty()) {
 			cout << "Fingers are tracked!" << endl;
 			
-			if(fingersMoments.size() > 1)
+			if(fingersMoments.size() > 0)
 				startTracking = true;
 
 			cout << "fingersMoments.size() " << fingersMoments.size() << endl;
 
 			if (startTracking) {
 				if (fingersMoments.size() == 1) {
-					if (lastFingerSize == 2) {
+					if (lastFingerSize == 0) {
 						iLastX = -1;
 						iLastY = -1;
 					}
@@ -161,7 +178,7 @@ int main(int argc, char** argv)
 			}
 		}
 
-
+		
 
 		//Calculate the moments of the thresholded image
 		//Moments oMoments = moments(imgThresholded);
@@ -172,7 +189,7 @@ int main(int argc, char** argv)
 		cout << "dArea " << dArea << ";  " << endl;
 
 		// if the area <= 10000, I consider that the there are no object in the image and it's because of the noise, the area is not zero 
-		if (dArea > 1500)
+		if (dArea > 10000)
 		{
 			//calculate the position of the ball
 			int posX = dM10 / dArea;
@@ -227,6 +244,9 @@ int main(int argc, char** argv)
 		for (int i = 0; i < 800; i++) {
 		rawImage.col(i).copyTo(resultImage.col(799-i));
 		}
+
+		//cv::Mat	resultImage = cv::Mat(800, 800, CV_8UC3);
+		//cv::resize(imgOriginal, resultImage, resultImage.size());
 
 		imshow("Original", resultImage); //show the original image
 

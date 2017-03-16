@@ -4,8 +4,8 @@ c:\opencv-3.1.0\opencv\build\include\opencv2\core\persistence.hpp : warning C481
 c:\opencv-3.1.0\opencv\build\include\opencv2\core\utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
 c:\opencv-3.1.0\opencv\build\include\opencv2\core\utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
 c:\users\li zhengqing\github\learnopencv\learnopencv\colordetection.cpp(10): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\li zhengqing\github\learnopencv\learnopencv\colordetection.cpp(176): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-c:\users\li zhengqing\github\learnopencv\learnopencv\colordetection.cpp(177): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-c:\users\li zhengqing\github\learnopencv\learnopencv\colordetection.cpp(231): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+c:\users\li zhengqing\github\learnopencv\learnopencv\colordetection.cpp(195): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\li zhengqing\github\learnopencv\learnopencv\colordetection.cpp(196): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\li zhengqing\github\learnopencv\learnopencv\colordetection.cpp(253): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
   learnOpenCV.vcxproj -> C:\Users\Li Zhengqing\Github\learnOpenCV\x64\Debug\learnOpenCV.exe
   learnOpenCV.vcxproj -> C:\Users\Li Zhengqing\Github\learnOpenCV\x64\Debug\learnOpenCV.pdb (Partial PDB)
