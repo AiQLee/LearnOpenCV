@@ -36,5 +36,8 @@
     <ClCompile Include="videoStabKalman.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="faceDetection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

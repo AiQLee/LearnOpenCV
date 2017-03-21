@@ -23,6 +23,7 @@
     <ClCompile Include="BackgroundSubtraction.cpp" />
     <ClCompile Include="colorDetection.cpp" />
     <ClCompile Include="edge_Detection.cpp" />
+    <ClCompile Include="faceDetection.cpp" />
     <ClCompile Include="MotionDetection.cpp" />
     <ClCompile Include="RotationTest.cpp" />
     <ClCompile Include="videoStabKalman.cpp" />
