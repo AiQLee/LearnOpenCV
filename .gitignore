@@ -1,0 +1,4 @@
+*.exe
+x64/Debug/learnOpenCV.exe
+*.pdb
+x64/Debug/learnOpenCV.ilk

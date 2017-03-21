@@ -19,9 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="backgroundSubstraction.cpp" />
+    <ClCompile Include="BackgroundSubtraction.cpp" />
     <ClCompile Include="colorDetection.cpp" />
     <ClCompile Include="edge_Detection.cpp" />
+    <ClCompile Include="MotionDetection.cpp" />
     <ClCompile Include="RotationTest.cpp" />
+    <ClCompile Include="videoStabKalman.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6CB20C20-C700-43C8-BC2C-639C86D3F25B}</ProjectGuid>
@@ -74,8 +78,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\OpenCV-3.1.0\opencv\build\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\OpenCV-3.1.0\opencv\build\x64\vc14\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Libraries\OpenCV3\build\include;C:\OpenCV-3.1.0\opencv\build\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Libraries\OpenCV3\build\lib\Debug;C:\OpenCV-3.1.0\opencv\build\x64\vc14\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
