@@ -1,9 +1,7 @@
-﻿  faceDetection.cpp
+﻿  optical_flow_object_detection.cpp
 c:\libraries\opencv3\build\include\opencv2\core\mat.hpp(1965): warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
 c:\libraries\opencv3\build\include\opencv2\core\persistence.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
 c:\libraries\opencv3\build\include\opencv2\core\utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
 c:\libraries\opencv3\build\include\opencv2\core\utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
-RotationTest.obj : warning LNK4099: PDB 'vc140.pdb' was not found with 'RotationTest.obj' or at 'C:\Users\Li Zhengqing\Github\learnOpenCV\x64\Debug\vc140.pdb'; linking object as if no debug info
-edge_Detection.obj : warning LNK4099: PDB 'vc140.pdb' was not found with 'edge_Detection.obj' or at 'C:\Users\Li Zhengqing\Github\learnOpenCV\x64\Debug\vc140.pdb'; linking object as if no debug info
-  learnOpenCV.vcxproj -> C:\Users\Li Zhengqing\Github\learnOpenCV\x64\Debug\learnOpenCV.exe
-  learnOpenCV.vcxproj -> C:\Users\Li Zhengqing\Github\learnOpenCV\x64\Debug\learnOpenCV.pdb (Partial PDB)
+  learnOpenCV.vcxproj -> C:\Users\Li Zhengqing\GitHub\LearnOpenCV\x64\Debug\learnOpenCV.exe
+  learnOpenCV.vcxproj -> C:\Users\Li Zhengqing\GitHub\LearnOpenCV\x64\Debug\learnOpenCV.pdb (Partial PDB)

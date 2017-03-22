@@ -25,8 +25,10 @@
     <ClCompile Include="edge_Detection.cpp" />
     <ClCompile Include="faceDetection.cpp" />
     <ClCompile Include="MotionDetection.cpp" />
+    <ClCompile Include="optical_flow_object_detection.cpp" />
     <ClCompile Include="RotationTest.cpp" />
     <ClCompile Include="videoStabKalman.cpp" />
+    <ClCompile Include="videoWriter.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6CB20C20-C700-43C8-BC2C-639C86D3F25B}</ProjectGuid>
