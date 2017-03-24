@@ -3,5 +3,6 @@ c:\libraries\opencv3\build\include\opencv2\core\mat.hpp(1965): warning C4819: Th
 c:\libraries\opencv3\build\include\opencv2\core\persistence.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
 c:\libraries\opencv3\build\include\opencv2\core\utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
 c:\libraries\opencv3\build\include\opencv2\core\utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
+c:\users\li zhengqing\github\learnopencv\learnopencv\optical_flow_object_detection.cpp(184): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
   learnOpenCV.vcxproj -> C:\Users\Li Zhengqing\GitHub\LearnOpenCV\x64\Debug\learnOpenCV.exe
   learnOpenCV.vcxproj -> C:\Users\Li Zhengqing\GitHub\LearnOpenCV\x64\Debug\learnOpenCV.pdb (Partial PDB)

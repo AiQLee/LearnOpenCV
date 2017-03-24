@@ -233,7 +233,7 @@
 //
 //		imshow("Thresholded Image", imgThresholded); //show the thresholded image
 //
-//		imgOriginal = rotate(imgOriginal, -angle/5);
+//		//imgOriginal = rotate(imgOriginal, -angle/5);
 //
 //		//imgOriginal = imgOriginal + imgLines;
 //

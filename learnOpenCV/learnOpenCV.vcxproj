@@ -20,10 +20,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="backgroundSubstraction.cpp" />
-    <ClCompile Include="BackgroundSubtraction.cpp" />
     <ClCompile Include="colorDetection.cpp" />
     <ClCompile Include="edge_Detection.cpp" />
     <ClCompile Include="faceDetection.cpp" />
+    <ClCompile Include="Moments.cpp" />
     <ClCompile Include="MotionDetection.cpp" />
     <ClCompile Include="optical_flow_object_detection.cpp" />
     <ClCompile Include="RotationTest.cpp" />
